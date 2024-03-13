@@ -39,13 +39,26 @@ input:valid {
 }
 
 
+input:not(:focus):placeholder-shown:invalid{
+    /* background-color: rgba(252, 0, 0, 0.13); */
+    outline: none;
+    border-color: rgba(56, 55, 55, 0.356);
+    /* box-shadow: 8px 8px 12px 0 red */
+}
+
+input:focus:placeholder-shown:invalid{
+    /* background-color: rgba(252, 0, 0, 0.13); */
+    outline: none;
+    border-color: rgba(56, 55, 55, 0.356);
+    /* box-shadow: 8px 8px 12px 0 red */
+}
+
 input:invalid{
     background-color: rgba(252, 0, 0, 0.13);
     outline: none;
     border-color: red;
     /* box-shadow: 8px 8px 12px 0 red */
 }
-
 /* input:focus {
     background-color: rgba(0, 109, 252, 0.13);
     outline: none;
