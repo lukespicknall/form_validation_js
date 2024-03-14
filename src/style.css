@@ -31,34 +31,51 @@ input {
     border-color: rgba(56, 55, 55, 0.356);
 }
 
-input:valid {
+.notValid {
+    background-color: rgba(255, 165, 165, 0.301);
+    outline: none;
+    border-color: red;
+}
+
+.isValid {
+    background-color: rgba(0, 252, 71, 0.075);
+    outline: none;
+    border-color: rgb(22, 201, 46);
+}
+/* 
+input:focus {
+    background-color: rgba(0, 109, 252, 0.13);
+    outline: none;
+    border-color: var(--theme1);
+    box-shadow: 8px 8px 12px 0 var(--theme1)
+} */
+
+
+/* input:valid {
     background-color: rgba(0, 252, 71, 0.13);
-    ;
     outline: none;
     border-color: rgb(22, 201, 46);
 }
 
 
 input:not(:focus):placeholder-shown:invalid{
-    /* background-color: rgba(252, 0, 0, 0.13); */
+    background-color: rgba(252, 0, 0, 0.13);
     outline: none;
     border-color: rgba(56, 55, 55, 0.356);
-    /* box-shadow: 8px 8px 12px 0 red */
 }
 
 input:focus:placeholder-shown:invalid{
-    /* background-color: rgba(252, 0, 0, 0.13); */
+    background-color: rgba(252, 0, 0, 0.13);
     outline: none;
     border-color: rgba(56, 55, 55, 0.356);
-    /* box-shadow: 8px 8px 12px 0 red */
 }
 
 input:invalid{
     background-color: rgba(252, 0, 0, 0.13);
     outline: none;
     border-color: red;
-    /* box-shadow: 8px 8px 12px 0 red */
-}
+    box-shadow: 8px 8px 12px 0 red
+} */
 /* input:focus {
     background-color: rgba(0, 109, 252, 0.13);
     outline: none;
