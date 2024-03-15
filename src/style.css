@@ -15,7 +15,8 @@
     flex-direction: column;
 }
 
-input {
+input,
+select {
     height: 31px;
     font-size: 15px;
     color: rgb(39, 39, 39);
@@ -24,21 +25,23 @@ input {
     border-radius: 5px;
     border-color: rgba(56, 55, 55, 0.356);
     min-width: 250px;
-    /* width: 100%; */
 }
 
 .def-input {
     border-color: rgba(56, 55, 55, 0.356);
 }
 
+select {
+    background-color: white;
+    height: 43px;
+}
+
 .notValid {
-    background-color: rgba(255, 165, 165, 0.301);
     outline: none;
     border-color: red;
 }
 
 .isValid {
-    background-color: rgba(0, 252, 71, 0.075);
     outline: none;
     border-color: rgb(22, 201, 46);
 }

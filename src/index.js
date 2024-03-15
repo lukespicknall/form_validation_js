@@ -1,6 +1,8 @@
 import './style.css';
+import countryOptions from './countries';
+import newUser from './user';
 
-// create DOM elements and thier attributes
+// Create page a form DOM elements to hang everything on
 const content = document.getElementById('content');
 
 const display = document.createElement('div');
@@ -13,6 +15,9 @@ const form = document.createElement('form');
 form.id = 'form';
 form.noValidate = true;
 
+// INPUT FIELD CREATION AND CUSTOM VALIDITY----------------
+
+// EMAIL
 const email = document.createElement('input');
 email.id = 'email';
 email.type = 'email';
@@ -58,9 +63,9 @@ email.oninput = () => {
   }
 };
 
-const country = document.createElement('input');
+// COUNTRY
+const country = document.createElement('select');
 country.id = 'country';
-country.type = ' select';
 country.required = true;
 country.classList.add('def-input');
 const countryLabel = document.createElement('label');
@@ -68,14 +73,46 @@ countryLabel.classList.add('labels');
 countryLabel.textContent = 'Country';
 const countryError = document.createElement('span');
 countryError.classList.add('error');
+// Default option display on load
+const defaultOption = document.createElement('option');
+defaultOption.value = '';
+defaultOption.textContent = 'Select country';
+country.appendChild(defaultOption);
+// Create an option from each country in countryOptions and put it in the select list
+for (let i = 0; i < countryOptions.length; i += 1) {
+  const option = document.createElement('option');
+  option.value = countryOptions[i].value;
+  option.textContent = countryOptions[i].label;
+  country.appendChild(option);
+}
 
+const showCountryError = () => {
+  if (country.validity.valueMissing) {
+    // If the field is empty,
+    // display the following error message.
+    countryError.textContent = 'Select country';
+    country.className = 'notValid';
+  }
+};
+
+country.oninput = () => {
+  if (country.validity.valid) {
+    countryError.textContent = '';
+    country.className = 'isValid';
+  } else if (!country.validity.valid) {
+    showCountryError();
+    country.className = 'notValid';
+  }
+};
+
+// ZIP CODE
 const zipCode = document.createElement('input');
 zipCode.id = 'zip-code';
 zipCode.type = 'text';
 zipCode.required = true;
 zipCode.pattern = '[0-9]{5}';
 zipCode.maxLength = 5;
-zipCode.placeholder = 'Enter a 5 digit zipcode';
+zipCode.placeholder = 'Enter a 5 digit Zip Code';
 zipCode.classList.add('def-input');
 const zipCodeLabel = document.createElement('label');
 zipCodeLabel.classList.add('labels');
@@ -107,6 +144,7 @@ zipCode.oninput = () => {
   }
 };
 
+// PASSWORD
 const password = document.createElement('input');
 password.id = 'password';
 password.type = 'password';
@@ -133,13 +171,11 @@ const showPasswordError = () => {
     passwordError.textContent = '6 characters long with a number and a letter';
     password.className = 'notValid';
   } else if (password.validity.tooShort) {
-    console.log('short');
     // If the field doesn't meet minLength,
     // display the following error message.
     passwordError.textContent = 'Must be 6 charecters long ';
     password.className = 'notValid';
   } else if (password.validity.patternMismatch) {
-    console.log('pattern');
     // If the field doesn't match letter+number pattern,
     // display the following error message.
     passwordError.textContent = 'Must contain a number and a letter';
@@ -157,6 +193,7 @@ password.oninput = () => {
   }
 };
 
+// PASSWORD CONFIRM
 const passwordConfirm = document.createElement('input');
 passwordConfirm.id = 'password-confirm';
 passwordConfirm.type = 'password';
@@ -178,8 +215,8 @@ const showPasswordConfirmError = () => {
 };
 
 passwordConfirm.oninput = () => {
-  const passwordGrabber = document.getElementById('password');
-  if (passwordConfirm.value !== passwordGrabber.value) {
+  // const passwordGrabber = document.getElementById('password');
+  if (passwordConfirm.value !== password.value) {
     // If password confirm doesn't match password
     passwordConfirmError.textContent = 'Passwords do not match';
     passwordConfirm.className = 'notValid';
@@ -192,6 +229,7 @@ passwordConfirm.oninput = () => {
   }
 };
 
+// Put those elements in an array to loop through for DOM creation below.
 const inputs = [
   emailLabel,
   email,
@@ -210,7 +248,7 @@ const inputs = [
   passwordConfirmError,
 ];
 
-// put each pair of label, input, and error span into a formField div for styling
+// Put each group of label, input, and error span into a formField div for styling.
 for (let i = 0; i < inputs.length; i += 3) {
   const formField = document.createElement('div');
   formField.classList.add('form-field');
@@ -223,6 +261,7 @@ for (let i = 0; i < inputs.length; i += 3) {
   form.appendChild(formField);
 }
 
+// SUBMIT SECTION -----------------------------------------
 const submitBox = document.createElement('div');
 const submitBtn = document.createElement('button');
 submitBtn.id = 'submit-button';
@@ -231,40 +270,74 @@ submitBox.appendChild(submitBtn);
 form.appendChild(submitBox);
 
 submitBtn.onclick = (e) => {
+  // counter to verify each requirement is met and form may be submitted
+  let verify = 0;
   if (!email.validity.valid) {
     // If it isn't, we display an appropriate error message
     showEmailError();
     // Then we prevent the form from being sent by canceling the event
     e.preventDefault();
+  } else {
+    verify += 1;
+  }
+  if (!country.validity.valid) {
+    // If it isn't, we display an appropriate error message
+    showCountryError();
+    // Then we prevent the form from being sent by canceling the event
+    e.preventDefault();
+  } else {
+    verify += 1;
   }
   if (!zipCode.validity.valid) {
     // If it isn't, we display an appropriate error message
     showZipCodeError();
     // Then we prevent the form from being sent by canceling the event
     e.preventDefault();
+  } else {
+    verify += 1;
   }
   if (!password.validity.valid) {
     // If it isn't, we display an appropriate error message
     showPasswordError();
     // Then we prevent the form from being sent by canceling the event
     e.preventDefault();
+  } else {
+    verify += 1;
   }
   if (!passwordConfirm.validity.valid) {
     // If it isn't, we display an appropriate error message
     showPasswordConfirmError();
     // Then we prevent the form from being sent by canceling the event
     e.preventDefault();
-  }
-  if (passwordConfirm.value !== password.value) {
+  } else if (passwordConfirm.value !== password.value) {
     // If the confirm password field doesn't match password field,
     // display the following error message.
     passwordConfirmError.textContent = 'Passwords do not match';
     passwordConfirm.className = 'notValid';
     e.preventDefault();
+  } else {
+    verify += 1;
   }
-  alert('GOOD JOB!');
+  // If all verifications are met, put all input data into a newUser object,
+  // Alert displaying that user info and Submit.
+  if (verify === 5) {
+    const userEmail = email.value;
+    const userCountry = country.value;
+    const userZipCode = zipCode.value;
+    const userPassword = password.value;
+    const userPasswordConfirm = passwordConfirm.value;
+    const userData = newUser(
+      userEmail,
+      userCountry,
+      userZipCode,
+      userPassword,
+      userPasswordConfirm,
+    );
+    alert(JSON.stringify(userData));
+  }
 };
 
+// PUT ALL OF THAT ON THE PAGE ----------------------------
 formCard.appendChild(form);
 
 display.append(formCard);
