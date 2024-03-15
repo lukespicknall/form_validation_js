@@ -19,7 +19,7 @@ email.type = 'email';
 email.name = 'email';
 email.required = true;
 email.placeholder = 'Enter your email address';
-email.setCustomValidity('');
+email.minLength = 3;
 email.classList.add('def-input');
 const emailLabel = document.createElement('label');
 emailLabel.setAttribute('for', 'email');
@@ -111,8 +111,9 @@ const password = document.createElement('input');
 password.id = 'password';
 password.type = 'password';
 password.required = true;
-password.pattern = '(?=.*d)(?=.*[a-zA-Z]).{6,}';
+password.pattern = '(?=.*?[0-9])(?=.*?[A-Za-z]).+';
 password.minLength = 6;
+password.placeholder = '6 char. Letter and number';
 password.classList.add('def-input');
 const passwordLabel = document.createElement('label');
 passwordLabel.classList.add('labels');
@@ -127,17 +128,19 @@ const showPasswordError = () => {
     passwordError.textContent = 'Enter a password';
     password.className = 'notValid';
   } else if (password.validity.patternMismatch && password.validity.tooShort) {
-    // If the field doesn't contain an password address,
+    // If the field doesn't match letter+number pattern or is too short,
     // display the following error message.
     passwordError.textContent = '6 characters long with a number and a letter';
     password.className = 'notValid';
   } else if (password.validity.tooShort) {
-    // If the field doesn't contain an password address,
+    console.log('short');
+    // If the field doesn't meet minLength,
     // display the following error message.
     passwordError.textContent = 'Must be 6 charecters long ';
     password.className = 'notValid';
   } else if (password.validity.patternMismatch) {
-    // If the field doesn't contain an password address,
+    console.log('pattern');
+    // If the field doesn't match letter+number pattern,
     // display the following error message.
     passwordError.textContent = 'Must contain a number and a letter';
     password.className = 'notValid';
@@ -146,11 +149,11 @@ const showPasswordError = () => {
 
 password.oninput = () => {
   if (password.validity.valid) {
-    passwordError.textContent = "";
-    password.className = "isValid";
+    passwordError.textContent = '';
+    password.className = 'isValid';
   } else if (!password.validity.valid) {
     showPasswordError();
-    password.className = "notValid";
+    password.className = 'notValid';
   }
 };
 
@@ -164,6 +167,30 @@ passwordConfirmLabel.classList.add('labels');
 passwordConfirmLabel.textContent = 'Confirm Password';
 const passwordConfirmError = document.createElement('span');
 passwordConfirmError.classList.add('error');
+
+const showPasswordConfirmError = () => {
+  if (passwordConfirm.validity.valueMissing) {
+    // If the field is empty,
+    // display the following error message.
+    passwordConfirmError.textContent = 'Confirm your password';
+    passwordConfirm.className = 'notValid';
+  }
+};
+
+passwordConfirm.oninput = () => {
+  const passwordGrabber = document.getElementById('password');
+  if (passwordConfirm.value !== passwordGrabber.value) {
+    // If password confirm doesn't match password
+    passwordConfirmError.textContent = 'Passwords do not match';
+    passwordConfirm.className = 'notValid';
+  } else if (passwordConfirm.validity.valid) {
+    passwordConfirmError.textContent = '';
+    passwordConfirm.className = 'isValid';
+  } else if (!passwordConfirm.validity.valid) {
+    showPasswordConfirmError();
+    passwordConfirm.className = 'notValid';
+  }
+};
 
 const inputs = [
   emailLabel,
@@ -193,8 +220,6 @@ for (let i = 0; i < inputs.length; i += 3) {
   formField.appendChild(inputs[grabber]);
   formField.appendChild(inputs[grabber2]);
 
-  //   const error
-  //   console.log(inputs[grabber].id);
   form.appendChild(formField);
 }
 
@@ -206,7 +231,6 @@ submitBox.appendChild(submitBtn);
 form.appendChild(submitBox);
 
 submitBtn.onclick = (e) => {
-  // if the email field is valid, we let the form submit
   if (!email.validity.valid) {
     // If it isn't, we display an appropriate error message
     showEmailError();
@@ -219,6 +243,26 @@ submitBtn.onclick = (e) => {
     // Then we prevent the form from being sent by canceling the event
     e.preventDefault();
   }
+  if (!password.validity.valid) {
+    // If it isn't, we display an appropriate error message
+    showPasswordError();
+    // Then we prevent the form from being sent by canceling the event
+    e.preventDefault();
+  }
+  if (!passwordConfirm.validity.valid) {
+    // If it isn't, we display an appropriate error message
+    showPasswordConfirmError();
+    // Then we prevent the form from being sent by canceling the event
+    e.preventDefault();
+  }
+  if (passwordConfirm.value !== password.value) {
+    // If the confirm password field doesn't match password field,
+    // display the following error message.
+    passwordConfirmError.textContent = 'Passwords do not match';
+    passwordConfirm.className = 'notValid';
+    e.preventDefault();
+  }
+  alert('GOOD JOB!');
 };
 
 formCard.appendChild(form);
